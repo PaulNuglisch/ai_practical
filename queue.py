@@ -26,7 +26,3 @@ class Queue:
 
     def is_empty(self):
         return len(self.items) == 0
-    
-    
-    
-    this is a test
