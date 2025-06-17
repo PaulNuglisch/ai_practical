@@ -1,6 +1,4 @@
-from myqueue import Queue
-from graph import Node, Edge, Graph
-from search import cool
+from pkg import Graph, BFS, DFS, UCS
 
 def main():
     romania = Graph( ['Or', 'Ne', 'Ze', 'Ia', 'Ar', 'Si', 'Fa',
@@ -21,9 +19,13 @@ def main():
    ('Hi', 'Ef', 86)
 ] )
     
-    romania.print()
+    #romania.print()
     
+    BFS(romania, 'Bu', 'Ti')
+    DFS(romania, 'Bu', 'Ti')
+    UCS(romania, 'Bu', 'Ti')
 
+    
 if __name__ == "__main__":
     main()
 

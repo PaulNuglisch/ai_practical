@@ -1,5 +1,4 @@
-
-
+from pkg.graph import Node, Edge, Graph 
 
 class Queue:
     def __init__(self, mode='FIFO'):
@@ -10,19 +9,23 @@ class Queue:
     def push(self, item):
         if self.mode in ['FIFO', 'LIFO']:
             self.items.append(item)
-        elif self.mode == 'PRIO':
+        elif self.mode in ['PRIO']:
             self.items.append(item)
             self.items.sort(key=lambda x: x.value)
-
+        
     def pop(self):
-        if self.is_empty():
-            return None
-        if self.mode == 'FIFO':
+        if self.mode in ['FIFO', 'PRIO']:
             return self.items.pop(0)
-        elif self.mode == 'LIFO':
+        if self.mode in ['LIFO']:
             return self.items.pop()
-        elif self.mode == 'PRIO':
-            return self.items.pop(0)
-
+                
     def is_empty(self):
         return len(self.items) == 0
+    
+    def contains(self, node):
+      if isinstance(node, str):
+         return any(n.name == node for n in self.items)
+      if isinstance(node, Node):
+         return any(n.name == node.name for n in self.items)
+     
+            
