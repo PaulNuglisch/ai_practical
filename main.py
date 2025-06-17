@@ -1,5 +1,6 @@
 from myqueue import Queue
 from graph import Node, Edge, Graph
+from search import cool
 
 def main():
     romania = Graph( ['Or', 'Ne', 'Ze', 'Ia', 'Ar', 'Si', 'Fa',
@@ -21,6 +22,7 @@ def main():
 ] )
     
     romania.print()
+    
 
 if __name__ == "__main__":
     main()
