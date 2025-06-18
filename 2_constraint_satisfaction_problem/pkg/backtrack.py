@@ -1,35 +1,54 @@
 from pkg.eightqueens import EightQueens
 
 
-def backtrack(csp, state, domains):
-    
-    csp = EightQueens()
-    state_copy = state    
-    
-    if csp.heuristic == 0:
-        return 1
-    
-    for row in state:
-        if row == -1:
-            for col in domains[row]:
-                if csp.is_consistent(row, col):
-                    state[row] = col
-                    if inferences(row, col, domains, csp.size):
-                        backtrack()
+from copy import deepcopy, copy
+import numpy as np
 
 
-def inferences(row, col, domains, size):
-    
-    backup_domains = domains
-    
+def inferences(row: int, col: int, domains: list, size: int, defined: list[int]) -> bool:
     for r in range(row + 1, size):
         to_remove = []
         for c in domains[r]:
             if c == col or abs(row - r) == abs(col - c):
                 to_remove.append(c)
+
         for c in to_remove:
             domains[r].remove(c)
-        if not domains[r]:
-            domain = backup_domains
-            return False
-    return True
+
+        # is column empty and there is no queen in that column
+        if not domains[r] and defined[r] == -1:
+            return True
+        
+    return False
+
+
+def backtrack(csp: EightQueens, row: int, domains: list) -> list:
+    # maximum depth reached
+    if row == 8:
+        # return current state, fingers crossed this is correct :D
+        return csp.state
+
+    for col in csp.domains[row]:
+        if csp.is_consistent(row, col):
+
+            # add var = value to assignment
+            csp.state[row] = col
+
+            # check inference, copy cps.domains as inferences applys changes to it
+            domains = deepcopy(csp.domains)
+            if not inferences(row, col, csp.domains, csp.size, csp.state):
+
+                # recursive call
+                result = backtrack(csp, row + 1, csp.domains)
+
+                # check if the heuristics are correct and (!) if the state is fully defined
+                if csp.heuristic() == 0 and csp.cost(csp.state) == 8:
+                    return result
+        
+            # remove var = value and inferences from assignment
+            csp.state[row] = -1
+            csp.domains = domains
+    
+    # no solution found on this depth, go up
+    # failue would be [-1] * csp.size
+    return csp.state
