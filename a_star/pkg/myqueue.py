@@ -25,4 +25,8 @@ class Queue:
     def contains(self, field):
          return any(item == field for item in self.items)
      
-            
+    def remove(self, field):
+        for i, item in enumerate(self.items):
+            if item == field:
+                del self.items[i]
+                break

@@ -28,6 +28,7 @@ class Grid:
         self.rows = rows
         self.cols = cols
         self.grid = [[Field(x, y) for y in range(cols)] for x in range(rows)]
+        self.start = None
         self.goal = None
 
     def draw(self, screen):
@@ -47,4 +48,16 @@ class Grid:
             self.grid[y][x].color = BLACK
     
     def calcH(self, field):
-        return math.sqrt((field.x - self.goal.x)^2 + (field.y - self.goal.y)^2)
+        return math.sqrt((field.x - self.goal.x) ** 2 + (field.y - self.goal.y) ** 2)
+    
+    def get_neighbors(self, field):
+        neighbors = []
+        directions = [(-1,0), (1,0), (0,-1), (0,1)]  # up, down, left, right
+        for dx, dy in directions:
+            x = field.x + dx
+            y = field.y + dy
+            if 0 <= x <= self.rows-1 and 0 <= y <= self.cols-1: #staying in the grid
+                neighbor = self.grid[x][y]
+                if neighbor.color != BLACK:
+                    neighbors.append(neighbor)
+        return neighbors

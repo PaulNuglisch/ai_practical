@@ -2,12 +2,16 @@ import pygame
 import math
 from pkg.grid import Field, Grid
 from pkg.config import BLACK, WHITE, BLUE, GREEN, RED, WIDTH, HEIGHT, MARGIN
+from pkg.a_star import a_star, initialize
+from pkg.myqueue import Queue
    
 pygame.init()
 size = (500, 500)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("My Game")
 done = False
+path = None
+path_is_printed = False
 clock = pygame.time.Clock()
 grid = Grid(20, 20)
 
@@ -19,25 +23,39 @@ walls = [
 grid.set_obstacles(walls)
 
 # Start and goal
+start = grid.grid[0][0]
+goal = grid.grid[19][19]
 grid.grid[0][0].color = GREEN     # S at (1,1)
 grid.grid[19][19].color = RED     # G at (20,20)
+grid.start = grid.grid[0][0]
 grid.goal = grid.grid[19][19]
+
+open = Queue('PRIO')
+closed = Queue()
+    
+initialize(grid, open)
 
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-
-            # ---
-        # The code here ist called once per clock tick
-        # Let your algorithm loop here
-            # ---
+        
+        if path is None:    
+            path = a_star(grid, open, closed)       
             
         screen.fill(BLACK)
         grid.draw(screen)
 
         pygame.display.flip()
         clock.tick(60)
+        
+        if path is not None and not path_is_printed:
+            print("Path:")
+            for node in path:
+                print(f"({node.x}, {node.y})")
+            path_is_printed = True
 pygame.quit()
+
+
 
 
