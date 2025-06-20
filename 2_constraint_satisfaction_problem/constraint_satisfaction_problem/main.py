@@ -23,7 +23,5 @@ from pkg.backtrack import backtrack
 
 
 csp = EightQueens()
-
-result = backtrack(csp, 0, csp.domains)
-csp.print_board()
-"Result state", result
+solutions = [0]
+result = backtrack(csp, 0, solutions, csp.domains)

@@ -1,6 +1,5 @@
 import random
 
-
 class EightQueens:
     def __init__(self, initial_state=None, mode='empty'):
         self.size = 8
@@ -58,4 +57,5 @@ class EightQueens:
             row = ["Q" if self.state[r] == c else "." for c in range(self.size)]
             print(" ".join(row))
         print("Heuristic (conflicts):", self.heuristic(self.state))
+        print("Cost:", self.cost(self.state))
         

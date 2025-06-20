@@ -22,28 +22,34 @@ def inferences(row: int, col: int, domains: list, size: int, defined: list[int])
     return False
 
 
-def backtrack(csp: EightQueens, row: int, domains: list) -> list:
-    # maximum depth reached
-    if row == 8:
-        # return current state, fingers crossed this is correct :D
-        return csp.state
-
+def backtrack(csp: EightQueens, row: int,solutions: list, domains: list) -> list:
+    
+    columns: list = []
     for col in csp.domains[row]:
+        columns.append(col)
+
+    for col in columns:
         if csp.is_consistent(row, col):
 
             # add var = value to assignment
             csp.state[row] = col
+            
+            # maximum depth reached
+            if row == 7 and csp.heuristic() == 0 and csp.cost(csp.state) == 8:
+                # return current state, fingers crossed this is correct :D
+                solutions[0] += 1
+                print()
+                print(f'Solution: {solutions}')
+                print()
+                csp.print_board()
+                return csp.state
 
             # check inference, copy cps.domains as inferences applys changes to it
             domains = deepcopy(csp.domains)
             if not inferences(row, col, csp.domains, csp.size, csp.state):
 
                 # recursive call
-                result = backtrack(csp, row + 1, csp.domains)
-
-                # check if the heuristics are correct and (!) if the state is fully defined
-                if csp.heuristic() == 0 and csp.cost(csp.state) == 8:
-                    return result
+                result = backtrack(csp, row + 1, solutions, csp.domains)
         
             # remove var = value and inferences from assignment
             csp.state[row] = -1

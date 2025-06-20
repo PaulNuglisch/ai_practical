@@ -25,9 +25,6 @@ def genetic_algorithm(population, mutation_probability:float = 0.05):
             
         new_population.append(merged)
         h = merged.heuristic()
-        if h == 0:
-            population = new_population
-            return merged
         
         if h < best_heuristic:
             best_heuristic = h
